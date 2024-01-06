@@ -1,0 +1,24 @@
+MDMPatcher is a backup patcher
+
+MDMPatcher utilizes methods such as:
+- MDMB is the backup folder
+- using different file extensions and manipulating archives with bytes to r/w to MDMB/Info.plist, MDMB/Manifest.plist
+
+In the info.plist it replaces the
+- BuildVersion
+- IMEI?
+- Product Type
+- Serial Number
+- TargetId <- udid (Target Identifier)
+- UDID <- udid (Unique Identifier)
+
+
+In the manifest it replaces the
+- BuildVersion
+- ProductType
+- SerialNumber
+- UDID (UniqueDeviceID)
+
+After the patching it restores (idevicebackup2) with these CMD_FLAGS (arguments):
+- "CMD_FLAG_RESTORE_SETTINGS" (--settings)
+
