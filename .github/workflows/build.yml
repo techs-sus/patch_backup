@@ -77,11 +77,18 @@ jobs:
         with:
           name: patch_backup-${{ matrix.platform.os_name }}
           path: "patch_backup*"
-      - name: generate the release tag
-        id: tag
+      - name: generate the release tag (*nix)
+        id: tag_nix
         run: |
           echo "release_tag=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
           echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
+        if: ${{ matrix.platform.target != 'x86_64-pc-windows-msvc' }}
+      - name: generate the release tag (windows)
+        id: tag_win
+        run: |
+          $release_tag = Get-Date -Format "yyyy-MM-dd"
+          "release_tag=$release_tag" >> $env:GITHUB_OUTPUT
+        if: ${{ matrix.platform.target == 'x86_64-pc-windows-msvc' }}
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v1
         env:
@@ -89,5 +96,5 @@ jobs:
         with:
           prerelease: true
           files: "patch_backup*"
-          name: ${{ steps.tag.outputs.release_tag }} patch_backup
-          tag_name: ${{ steps.tag.outputs.release_tag }}
+          name: ${{ steps.tag_nix.outputs.release_tag || steps.tag_win.outputs.release_tag }} patch_backup
+          tag_name: ${{ steps.tag_nix.outputs.release_tag || steps.tag_win.outputs.release_tag }}
