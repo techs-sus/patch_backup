@@ -77,9 +77,15 @@ jobs:
         with:
           name: patch_backup-${{ matrix.platform.os_name }}
           path: "patch_backup*"
+      - name: generate the release tag
+        id: tag
+        run: |
+          echo "release_tag=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
+          echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v1
         with:
           prerelease: true
           files: "patch_backup*"
-          tag_name: ${{ github.ref }}
+          name: ${{ steps.tag.outputs.release_tag }} patch_backup
+          tag_name: ${{ steps.tag.outputs.release_tag }}
