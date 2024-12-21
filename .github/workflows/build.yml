@@ -86,7 +86,7 @@ jobs:
       - name: generate the release tag (windows)
         id: tag_win
         run: |
-          $release_tag = Get-Date -Format "yyyy-MM-dd"
+          $release_tag = Get-Date -Format "yyyy.MM.dd"
           echo release_tag=$release_tag >> $env:GITHUB_OUTPUT
         if: ${{ matrix.platform.target == 'x86_64-pc-windows-msvc' }}
       - name: Publish GitHub release
